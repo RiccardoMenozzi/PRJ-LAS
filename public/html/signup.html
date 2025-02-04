@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Signup - PRJ-LAS</title>
-  <!-- Carica jQuery prima di Toastr -->
+  <!-- Loads jQuery before Toastr -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     
   <!-- Toastr -->
@@ -17,7 +17,7 @@
   <div class="container">
     <h1>Sign up</h1>
     <form action="signup" method="post" id="signupForm">
-      <p class="error" style="display: none" id="errorMessage">Email già in uso</p>
+      <p class="error" style="display: none" id="errorMessage">Email already in use</p>
       <div class="input-wrapper">
         <input type="email" id="signupEmail" name="email" placeholder="Email" required="required" />
       </div>
@@ -26,13 +26,13 @@
         <i class="fas fa-eye" id="toggleSignupPassword"></i>
       </div>
       <div class="input-wrapper">
-        <input type="password" id="signupConfirmPassword" name="confirmPassword" placeholder="Conferma password" required="required" />
+        <input type="password" id="signupConfirmPassword" name="confirmPassword" placeholder="Confirm password" required="required" />
         <i class="fas fa-eye" id="toggleSignupConfirmPassword"></i>
       </div>
-      <p id="confirmPasswordMessage"><i class="fas fa-exclamation-circle"></i> Le password non corrispondono</p>
-      <button type="submit">Registrati</button>
+      <p id="confirmPasswordMessage"><i class="fas fa-exclamation-circle"></i> Passwords don't match</p>
+      <button type="submit">Sign up</button>
     </form>
-    <p>Sei già registrato? <a href="login">Accedi</a></p>
+    <p>Already have an account? <a href="login">Login</a></p>
   </div>
   <script src="../js/script.js"></script>
   <script src="../js/signup.js"> </script>

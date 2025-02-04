@@ -1,4 +1,4 @@
-# Login and signup flow
+# Login and sign up flow
 
 This repository contains a basic user system for a web application.
 ## Installation

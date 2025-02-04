@@ -12,11 +12,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const token = urlParams.get("token")
 
     if (!token) {
-        window.location.href = "/404" // Reindirizza a una pagina di errore
+        window.location.href = "/404" //redirects to 404
         return
     }
 
-    // Crea un input nascosto per il token
+    // hidden token input
     const hiddenTokenInput = document.createElement("input")
     hiddenTokenInput.type = "hidden"
     hiddenTokenInput.name = "token"
@@ -37,7 +37,7 @@ document.getElementById("reset-submit").addEventListener("click", async (event) 
     const token = document.getElementById('token').value
 
     if (!token) {
-        toastr.error("Email sconosciuta.")
+        toastr.error("Unknown email")
         return
     }
 
@@ -53,13 +53,13 @@ document.getElementById("reset-submit").addEventListener("click", async (event) 
 
         if (data.success) {
             form.style.display = 'none'
-            resetPasswordP.textContent = "Password modificata con successo"
+            resetPasswordP.textContent = "Password changed successfully"
             resetPasswordP.style.color = "green"
         } else {
             toastr.error(data.message)
         }
     } catch (error) {
-        toastr.error("Errore di connessione. Riprova.")
+        toastr.error("Connection error, retry.")
     }
 })
 

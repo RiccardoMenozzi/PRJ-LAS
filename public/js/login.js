@@ -44,13 +44,13 @@ loginForm.addEventListener("submit", async function (event) {
                 loginPasswordField.classList.add('input-error')
                 loginEmailField.classList.add('input-error')
             } else {
-                errorMessage.textContent = "Non veriified email"
+                errorMessage.textContent = "Non verified email"
                 loginEmailField.classList.add('input-error')
             }
         }
     } catch (error) {
-        console.error("Errore durante il login:", error)
-        toastr.error("Errore inaspettato")
+        console.error("Error while logging in:", error)
+        toastr.error("Unexpected error")
     }
 })
 

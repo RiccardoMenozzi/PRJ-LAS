@@ -1,9 +1,11 @@
+const {notFound} = require("./utils")
 const express = require("express")
 const join = require("path").join
 const jwt = require('jsonwebtoken')
 const configs = require("./configs")
 const UsersComponent = require("./UsersComponent")
 const EmailComponent = require("./EmailComponent")
+
 
 const app = new express()
 const usersComponent = new UsersComponent("./state.json")
@@ -36,9 +38,6 @@ app.get("/signup", (req, res) => {
 
 app.post("/signup", async (req, res) => {
     const result = await usersComponent.create(req.body)
-
-    console.log(result)
-
     if (result.success) {
         const user = result.user
         usersComponent.setUserToken(user.email)
@@ -61,7 +60,7 @@ app.get('/verify-email', async (req, res) => {
     const { token } = req.query
 
     try {
-        const decoded = jwt.verify(token, configs.JWT_SECRET)  // Verifica il token
+        const decoded = jwt.verify(token, configs.JWT_SECRET) 
         const email = decoded.email
 
         const user = usersComponent.getUser(email)
@@ -91,7 +90,7 @@ app.get('/verify-email', async (req, res) => {
         }
 
         if (email) {
-            // Genera un nuovo token e invia una nuova email
+            //New token and new mail
             const newToken = jwt.sign({ email }, configs.JWT_SECRET, { expiresIn: '1h' })
             usersComponent.setUserToken(email, newToken)
             emailComponent.sendEmail(email, "verify-email", newToken)
@@ -103,7 +102,6 @@ app.get('/verify-email', async (req, res) => {
     }
 })
 
-
 app.get("/verified-email", (req, res) => {
     res.sendFile(join(__dirname, "../public/html/verifiedEmail.html"))
 })
@@ -111,22 +109,22 @@ app.get("/verified-email", (req, res) => {
 app.post("/resend-email", async (req, res) => {
     const { email } = req.body
     if (!email) {
-        return res.status(400).json({ success: false, message: "Email richiesta" })
+        return res.status(400).json({ success: false, message: "Email required" })
     }
 
     const user = usersComponent.getUser(email)
     if (!user) {
-        return res.status(404).json({ success: false, message: "Utente non trovato" })
+        return res.status(404).json(notFound)
     }
 
     if (user.verified) {
-        return res.status(400).json({ success: false, message: "Email già verificata" })
+        return res.status(400).json({ success: false, message: "Email already verified"})
     }
 
     usersComponent.setUserToken(user.email)
     emailComponent.sendEmail(user.email, "verify-email", user.token)
 
-    return res.json({ success: true, user, message: "Email di conferma inviata nuovamente" })
+    return res.json({ success: true, user, message: "Email resent successfully!" })
 })
 
 app.get('/forgot-password', async (req, res) => {
@@ -137,19 +135,19 @@ app.post('/forgot-password', async (req, res) => {
     const { email } = req.body
 
     if (!email) {
-        return res.status(400).json({ success: false, message: "Email richiesta" })
+        return res.status(400).json({ success: false, message: "Email required" })
     }
 
     const user = usersComponent.getUser(email)
 
     if (!user || !user?.verified) {
-        return res.status(400).json({ success: false, message: "Email non collegata a nessun utente" })
+        return res.status(400).json(notFound)
     }
 
     usersComponent.setUserToken(email)
     emailComponent.sendEmail(email, "reset-password", user.token)
 
-    return res.json({ success: true, message: "Email di reset password inviata" })
+    return res.json({ success: true, message: "Email sent successfully" })
 })
 
 app.get('/reset-password', async (req, res) => {
@@ -161,9 +159,7 @@ app.get('/reset-password', async (req, res) => {
 
         const user = usersComponent.getUser(email)
 
-        if (!user) {
-            return res.status(404).json({ success: false, message: "Utente non trovato" })
-        }
+        if (!user) res.status(404).json(notFound)
 
         if (user.token !== token) {
             return res.status(400).json({ success: false, message: "Link non valido o già usato" })
@@ -184,25 +180,21 @@ app.post('/reset-password', async (req, res) => {
 
         const user = usersComponent.getUser(email)
         if (!user) {
-            return res.status(400).json({ success: false, message: "Utente sconosciuto" })
+            return res.status(400).json(notFound)
         }
 
         if (user.token !== token) {
-            return res.status(400).json({ success: false, message: "Link non valido o scaduto" })
+            return res.status(400).json({ success: false, message: "Invalid link" })
         }
 
         usersComponent.updateUserPassword(email, password)
 
-        usersComponent.invalidateUserToken(email)
-
-        res.json({ success: true, message: "Nuova password impostata" })
+        res.json({ success: true, message: "Password Changed" })
     } catch (error) {
-        return res.status(400).json({ success: false, message: "Link non valido o scaduto" })
+        return res.status(400).json({ success: false, message: "Invalid link" })
     }
 })
 
-app.use((req, res) => {
-    res.sendFile(join(__dirname, "../public/html/404.html"))
-})
+app.use((req, res) => {res.sendFile(join(__dirname, "../public/html/404.html"))}) //404 endpoint not found
 
 app.listen(configs.PORT, configs.SITE_URL, () => console.log("server listening on port", configs.PORT))
