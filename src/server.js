@@ -81,16 +81,14 @@ app.get('/verify-email', async (req, res) => {
         usersComponent.updateVerificationStatus(email, true)
 
         return res.redirect(`/verified-email?status=success&email=${encodeURIComponent(user.email)}`)
-    } catch (error) {
-        // Se il token è scaduto, prova a decodificarlo senza verificare
+    } catch (error) {        // get email from invalid token
         let email = null
         if (error.name === "TokenExpiredError") {
-            const decoded = jwt.decode(token)  // Decodifica il token senza verificare
+            const decoded = jwt.decode(token)  // Decode token without checking
             email = decoded?.email
         }
 
-        if (email) {
-            //New token and new mail
+        if (email) {   //New token and new mail
             const newToken = jwt.sign({ email }, configs.JWT_SECRET, { expiresIn: '1h' })
             usersComponent.setUserToken(email, newToken)
             emailComponent.sendEmail(email, "verify-email", newToken)
@@ -162,12 +160,12 @@ app.get('/reset-password', async (req, res) => {
         if (!user) res.status(404).json(notFound)
 
         if (user.token !== token) {
-            return res.status(400).json({ success: false, message: "Link non valido o già usato" })
+            return res.status(400).json({ success: false, message: "Invalid link" })
         }
 
         res.sendFile(join(__dirname, "../public/html/resetPassword.html"))
     } catch (error) {
-        res.status(400).send('Link non valido o scaduto.')
+        res.status(400).send('Invalid link')
     }
 })
 
@@ -177,11 +175,9 @@ app.post('/reset-password', async (req, res) => {
     try {
         const decoded = jwt.verify(token, configs.JWT_SECRET)
         const email = decoded.email
-
         const user = usersComponent.getUser(email)
-        if (!user) {
-            return res.status(400).json(notFound)
-        }
+
+        if (!user) res.status(400).json(notFound)
 
         if (user.token !== token) {
             return res.status(400).json({ success: false, message: "Invalid link" })

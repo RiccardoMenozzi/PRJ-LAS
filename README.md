@@ -1,6 +1,21 @@
 # Login and sign up flow
 
 This repository contains a basic user system for a web application.
+## Email set up
+
+1. Create a new gmail for yourself (it works with any provider but some authorizations may vay)
+
+2. Set up 2FA for your new google account
+
+3. Create a new app password with "email" as the app name
+
+4. Fill in your own .env with your Gmail email and it's specific app password:
+    ```bash
+    EMAIL = "YourEmail@gmail.com"
+    ``` 
+    ```bash
+    EMAIL_PASSWORD = **** **** **** ****
+    ```
 ## Installation
 
 1. Install the dependencies:
@@ -8,16 +23,14 @@ This repository contains a basic user system for a web application.
     ```bash
     npm install
     ```
-2. Fill in your own .env with a Gmail and it's specific app password:
-    EMAIL = "YourEmail@gmail.com"
-    EMAIL_PASSWORD = **** **** **** ****
 
-3. You will also need:
-    JWT_SECRET = random alphanumeric string 
-    SITE_HOST = localhost (probably)
-    PORT = 8080 (probably)
-    SALT_ROUNDS = a number (usually grater than 10)
-
+2. You will also need:
+    ```bash
+    JWT_SECRET = 37yhefb2dfiusd79hdjqkw //random alphanumeric string 
+    SITE_HOST = localhost
+    PORT = 8080 
+    SALT_ROUNDS = 10 //any number but usually greater than 10
+    ```
   * note that the DB (state.json) and node_modules will
     create themselves 
 ## How to Use the code
@@ -30,4 +43,4 @@ This repository contains a basic user system for a web application.
 
 2. Open your browser and search for `http://localhost:8080`.
 
-3. Make sure to have your WI-FI on to experience the full 2FA
+3. Make sure to be connected to the network to be able to send emails 
