@@ -5,9 +5,14 @@ const resend = document.getElementById('resend')
 const newEmailP = document.getElementById('newEmailP')
 const title = document.getElementById('title')
 
-async function sendEmail (event) {
-    event.preventDefault() // Previene il refresh della pagina
+const urlParams = new URLSearchParams(window.location.search)
+const emailFromURL = urlParams.get("email")
+document.getElementById('email').value = emailFromURL
 
+
+
+async function sendEmail (event) {
+    event.preventDefault() // prevents the page refresh
     const email = document.getElementById("email").value
 
     if (!email) {

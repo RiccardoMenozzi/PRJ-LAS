@@ -69,3 +69,15 @@ loginEmailField.addEventListener('input', () => {
     loginPasswordField.classList.remove('input-error')
     errorMessage.style.display = "none"
 })
+
+
+loginEmailField.addEventListener("input", () => { //sends the email to the forgot-password page
+        const forgotPasswordLink = document.getElementById("forgotPasswordLink")
+        const email = loginEmailField.value
+        if (email.trim() !== "") {
+            forgotPasswordLink.href = `forgot-password?email=${encodeURIComponent(email)}`
+        } else {
+            forgotPasswordLink.href = "forgot-password"; // Reset if empty
+        }
+    })
+

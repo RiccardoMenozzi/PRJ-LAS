@@ -111,9 +111,7 @@ app.post("/resend-email", async (req, res) => {
     }
 
     const user = usersComponent.getUser(email)
-    if (!user) {
-        return res.status(404).json(notFound)
-    }
+    if (!user)res.status(404).json(notFound)
 
     if (user.verified) {
         return res.status(400).json({ success: false, message: "Email already verified"})

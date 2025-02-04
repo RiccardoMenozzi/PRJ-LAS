@@ -24,7 +24,7 @@ This repository contains a basic user system for a web application.
     npm install
     ```
 
-2. You will also need:
+2. In your .env file will also need:
     ```bash
     JWT_SECRET = A random alphanumeric code 
     SITE_HOST = Localhost or your own provider
