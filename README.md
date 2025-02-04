@@ -26,13 +26,19 @@ This repository contains a basic user system for a web application.
 
 2. You will also need:
     ```bash
-    JWT_SECRET = 37yhefb2dfiusd79hdjqkw //random alphanumeric string 
+    JWT_SECRET = A random alphanumeric code 
+    SITE_HOST = Localhost or your own provider
+    PORT = The port you are hosting on
+    SALT_ROUNDS = Any number, usually greater than 10
+    ```
+    For example
+    ```bash
+    JWT_SECRET = 37yhefb2dfiusd79hdjqkw 
     SITE_HOST = localhost
     PORT = 8080 
-    SALT_ROUNDS = 10 //any number but usually greater than 10
+    SALT_ROUNDS = 10 
     ```
-  * note that the DB (state.json) and node_modules will
-    create themselves 
+  * note that the DB (state.json) is going to be generated automatically after the first run and every time it's deleted
 ## How to Use the code
 
 1. Run the server:
