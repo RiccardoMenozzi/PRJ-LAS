@@ -1,10 +1,18 @@
-const {notFound} = require("./utils")
-const express = require("express")
-const join = require("path").join
-const jwt = require('jsonwebtoken')
-const configs = require("./configs")
 const UsersComponent = require("./UsersComponent")
 const EmailComponent = require("./EmailComponent")
+const configs = require("./configs")
+const jwt = require('jsonwebtoken')
+const express = require("express")
+const join = require("path").join
+const {
+    notFound, 
+    emailRequired, 
+    alreadyVerified, 
+    successfulResend, 
+    successfulSend, 
+    invalidLink, 
+    passwordChanged 
+        } = require("./errMess")
 
 
 const app = new express()
@@ -25,6 +33,7 @@ app.get("/login", (req, res) => {
 
 app.post("/login", async (req, res) => {
     const result = await usersComponent.login(req.body.email, req.body.password)
+    
     if (result.success) {
         res.json(result)
     } else {
@@ -106,21 +115,18 @@ app.get("/verified-email", (req, res) => {
 
 app.post("/resend-email", async (req, res) => {
     const { email } = req.body
-    if (!email) {
-        return res.status(400).json({ success: false, message: "Email required" })
-    }
-
+    if (!email) res.status(400).json(emailRequired)
+    
     const user = usersComponent.getUser(email)
-    if (!user)res.status(404).json(notFound)
 
-    if (user.verified) {
-        return res.status(400).json({ success: false, message: "Email already verified"})
-    }
-
+    if (!user) res.status(404).json(notFound)
+    if (user.verified) res.status(400).json(alreadyVerified)
+    
+    successfulResend.user = user
     usersComponent.setUserToken(user.email)
     emailComponent.sendEmail(user.email, "verify-email", user.token)
 
-    return res.json({ success: true, user, message: "Email resent successfully!" })
+    return res.json(successfulResend)
 })
 
 app.get('/forgot-password', async (req, res) => {
@@ -130,20 +136,15 @@ app.get('/forgot-password', async (req, res) => {
 app.post('/forgot-password', async (req, res) => {
     const { email } = req.body
 
-    if (!email) {
-        return res.status(400).json({ success: false, message: "Email required" })
-    }
-
+    if (!email) res.status(400).json(emailRequired)
     const user = usersComponent.getUser(email)
 
-    if (!user || !user?.verified) {
-        return res.status(400).json(notFound)
-    }
-
+    if (!user || !user?.verified) res.status(400).json(notFound)
+    
     usersComponent.setUserToken(email)
     emailComponent.sendEmail(email, "reset-password", user.token)
 
-    return res.json({ success: true, message: "Email sent successfully" })
+    return res.json(successfulSend)
 })
 
 app.get('/reset-password', async (req, res) => {
@@ -158,7 +159,7 @@ app.get('/reset-password', async (req, res) => {
         if (!user) res.status(404).json(notFound)
 
         if (user.token !== token) {
-            return res.status(400).json({ success: false, message: "Invalid link" })
+            return res.status(400).json(invalidLink)
         }
 
         res.sendFile(join(__dirname, "../public/html/resetPassword.html"))
@@ -177,13 +178,11 @@ app.post('/reset-password', async (req, res) => {
 
         if (!user) res.status(400).json(notFound)
 
-        if (user.token !== token) {
-            return res.status(400).json({ success: false, message: "Invalid link" })
-        }
+        if (user.token !== token) res.status(400).json(invalidLink)
 
         usersComponent.updateUserPassword(email, password)
+        res.json(passwordChanged)
 
-        res.json({ success: true, message: "Password Changed" })
     } catch (error) {
         return res.status(400).json({ success: false, message: "Invalid link" })
     }

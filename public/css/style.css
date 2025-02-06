@@ -144,7 +144,7 @@ p.home-p {
   width: 100%;
   padding: 10px;
   padding-right: 40px;
-  border: 1px solid #666; /* Bordo più visibile */
+  border: 1px solid #666;
   border-radius: 5px;
   font-size: 1em;
   background: rgba(0, 0, 0, 0);
@@ -153,7 +153,7 @@ p.home-p {
 }
 
 .input-wrapper input::placeholder {
-  color: #555; /* Placeholder più leggibile */
+  color: #555; 
 }
 
 .input-wrapper i {
@@ -174,10 +174,10 @@ p.home-p {
 }
 
 button {
-  background-color: #3498db; /* Un blu più chiaro e moderno */
+  background-color: #3498db; 
 }
 
-/* --- BOTTONI --- */
+/* --- BUTTONS --- */
 button, .a-button {
   min-width: 100px;
   display: inline-block;

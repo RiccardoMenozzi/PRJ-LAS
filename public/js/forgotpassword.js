@@ -16,7 +16,7 @@ async function sendEmail (event) {
     const email = document.getElementById("email").value
 
     if (!email) {
-        toastr.error("Inserisci un'email valida.")
+        toastr.error("Insert a valid email.")
         return
     }
 
@@ -34,14 +34,14 @@ async function sendEmail (event) {
             form.style.display = 'none'
             resendEmailP.style.display = 'block'
             newEmailP.style.display = 'block'
-            title.innerText = "Email di ripristino inviata"
-            messageP.innerHTML = `Utilizza il link inviato all'indirizzo <br><a href="mailto:${email}">${email}</a><br> per impostare una nuova password`
-            toastr.success(data.message || "Email inviata con successo!")
+            title.innerText = "Your email was sent successfully"
+            messageP.innerHTML = `Use the link sent to <br><a href="mailto:${email}">${email}</a><br> to reset your password`
+            toastr.success(data.message || "Email sent successfully")
         } else {
-            toastr.error(data.message || "Errore nell'invio dell'email.")
+            toastr.error(data.message || "Error while sending the email")
         }
     } catch (error) {
-        toastr.error("Errore di connessione. Riprova.")
+        toastr.error("Connection error, retry")
     }
 }
 
@@ -53,10 +53,10 @@ resendEmailP.addEventListener("click", (event) => {
     }
     sendEmail(event)
     resend.style.pointerEvents = "none"
-    resend.textContent = "Attendi..."
+    resend.textContent = "Loading..."
 
     setTimeout(() => {
         resend.style.pointerEvents = "auto"
-        resend.textContent = "Rimanda Email"
+        resend.textContent = "Resend email"
     }, 7000)
 })

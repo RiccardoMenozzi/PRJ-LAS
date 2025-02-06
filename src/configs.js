@@ -1,7 +1,6 @@
 require("dotenv").config()
 
 const {
-    
     EMAIL_PASSWORD,
     SALT_ROUNDS,
     JWT_SECRET,

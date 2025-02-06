@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken')
 const configs = require("./configs")
 const bcrypt = require("bcrypt")
 const SR = parseInt(configs.SALT_ROUNDS)
-const notFound = { success: false, message: "User not found" }
 
 function generateToken(email) {
     return jwt.sign({ email }, configs.JWT_SECRET, { expiresIn: '1h' })
@@ -40,6 +39,5 @@ module.exports = {
     generateToken,
     hashPassword,
     emailFileOf,
-    notFound,
     urlOf
 }

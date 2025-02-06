@@ -1,6 +1,19 @@
 const fs = require("fs")
 const bcrypt = require("bcrypt")
-const { generateToken, hashPassword, notFound } = require("./utils")
+const { generateToken, hashPassword } = require("./utils")
+const {
+    tokenInvalidated,
+    resettedPassword,
+    verifiedPassword,
+    wrongPassword,
+    userCreated,
+    notVerified,
+    usedEmail,
+    notFound,
+    loggedIn,
+    tokenSet            
+    } = require("./errMess")
+
 class UsersComponent {
     constructor(statePath) {
         this.users = []
@@ -28,7 +41,7 @@ class UsersComponent {
         user.token = generateToken(email)
         this.serialize()
 
-        return { success: true, message: "Token set successfully" }
+        return tokenSet
     }
 
     invalidateUserToken(email) {
@@ -38,7 +51,7 @@ class UsersComponent {
         user.token = null
         this.serialize()
 
-        return { success: true, message: "Token invalidated successfully" }
+        return tokenInvalidated
     }
 
     async updateUserPassword(email, password) {
@@ -49,7 +62,7 @@ class UsersComponent {
         this.invalidateUserToken(email)
         this.serialize()
         
-        return { success: true, message: "Reset password successful" }
+        return resettedPassword
     }
     
     updateVerificationStatus(email, verified) {
@@ -60,13 +73,13 @@ class UsersComponent {
         user.token = null
         this.serialize()
 
-        return { success: true, message: "Verification status updated" }
+        return verifiedPassword
     }
 
     async create(data) {
         const { email, password } = data
         if (this.getUser(email)) {
-            return { success: false, message: "Email already in use"}
+            return usedEmail
         }
 
         const user = {
@@ -75,25 +88,25 @@ class UsersComponent {
             token : null,
             verified: false
         }
+        userCreated.user = user
         this.users.push(user)
         this.serialize()
         
-        return { success: true, user, message: "User created successfully. Check your email for confirmation." }
+        return userCreated
     }
 
     async login(email, password) {
         const user = this.getUser(email)
+
         if (!user) return notFound
 
-        if (!user.verified) {
-            return { success: false, user, message: "Non verified email. Check your inbox or spam." }
-        }
+        if (!user.verified) return notVerified
 
         if (await bcrypt.compare(password, Buffer.from(user.password, 'base64').toString('utf-8'))) {
-            return { success: true, user, message: "Login successful" }
+            return loggedIn
         }
 
-        return { success: false, user, message: "wrong password" }
+        return wrongPassword
     }
 
 }
