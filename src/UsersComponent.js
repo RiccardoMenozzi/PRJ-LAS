@@ -97,6 +97,9 @@ class UsersComponent {
 
     async login(email, password) {
         const user = this.getUser(email)
+        wrongPassword.user = user
+        notVerified.user = user
+        loggedIn.user = user
 
         if (!user) return notFound
 

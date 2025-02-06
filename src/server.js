@@ -142,6 +142,7 @@ app.post('/forgot-password', async (req, res) => {
     if (!user || !user?.verified) res.status(400).json(notFound)
     
     usersComponent.setUserToken(email)
+    successfulSend.user = user
     emailComponent.sendEmail(email, "reset-password", user.token)
 
     return res.json(successfulSend)
