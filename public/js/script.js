@@ -17,12 +17,12 @@ function togglePasswordVisibility(inputField, toggleIcon) {
 
 function checkPasswords(passwordField, confirmPasswordField, messageElement, submitButton) {
     if (passwordField.value !== confirmPasswordField.value && confirmPasswordField.value != "") {
-        messageElement.style.display = 'block'
+        messageElement.style.opacity = 1
         submitButton.disabled = true
         passwordField.classList.add('input-error')
         confirmPasswordField.classList.add('input-error')
     } else {
-        messageElement.style.display = 'none'
+        messageElement.style.opacity = 0
         submitButton.disabled = false
         passwordField.classList.remove('input-error')
         confirmPasswordField.classList.remove('input-error')

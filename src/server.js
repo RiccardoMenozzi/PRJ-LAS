@@ -53,7 +53,7 @@ app.post("/signup", async (req, res) => {
         emailComponent.sendEmail(user.email, "verify-email", user.token)
         res.redirect(`/signup-confirmation?email=${encodeURIComponent(user.email)}`)
     } else {
-        res.status(400).json(result)
+        res.json(result)
     }
 })
 

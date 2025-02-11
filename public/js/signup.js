@@ -25,7 +25,7 @@ signupForm.addEventListener("submit", async (event) => {
         if (response.ok) {
             window.location.href = `/signup-confirmation?email=${encodeURIComponent(email)}`
         } else {
-            errorMessage.style.display = "inline-block"
+            errorMessage.style.opacity = 1
             signupEmailField.classList.add('input-error')
         }
     } catch (error) {
@@ -36,7 +36,7 @@ signupForm.addEventListener("submit", async (event) => {
 
 signupEmailField.addEventListener('input', () => {
     signupEmailField.classList.remove('input-error')
-    errorMessage.style.display = "none"
+    errorMessage.style.display = 0
 })
 
 toggleSignupPassword.addEventListener('click', () => 

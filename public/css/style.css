@@ -225,8 +225,13 @@ input[type="text"], input[type="email"], input[type="password"] {
   margin-top: 6px;
   margin-left: 2px;
   text-align: left;
-  display: none;
+  opacity: 0;
   /* transform: translateY(-50%); */
+}
+
+#errorMessage{
+  display: inline-block;
+  opacity: 0;
 }
 
 #confirmPasswordMessage i {
