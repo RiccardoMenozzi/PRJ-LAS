@@ -218,6 +218,11 @@ input[type="text"], input[type="email"], input[type="password"] {
   border: 2px solid red !important;
 }
 
+.input-error:focus {
+  border: 2px solid red !important;
+  outline: none;
+}
+
 #confirmPasswordMessage {
   color: red;
   font-size: 0.8em;
