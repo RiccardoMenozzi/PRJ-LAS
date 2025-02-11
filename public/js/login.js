@@ -38,7 +38,7 @@ loginForm.addEventListener("submit", async function (event) {
             sessionStorage.setItem("loggedUserEmail", data.user.email)
             window.location.href = "/welcome"
         } else {
-            errorMessage.style.display = "inline-block"
+            errorMessage.style.opacity = 1
             if (!data.user || data.user?.verified) {
                 errorMessage.textContent = "Wrong email or password"
                 loginPasswordField.classList.add('input-error')
@@ -61,13 +61,13 @@ toggleLoginPassword.addEventListener('click', () =>
 loginPasswordField.addEventListener('input', () => {
     loginEmailField.classList.remove('input-error')
     loginPasswordField.classList.remove('input-error')
-    errorMessage.style.display = "none"
+    errorMessage.style.opacity = 0
 })
 
 loginEmailField.addEventListener('input', () => {
     loginEmailField.classList.remove('input-error')
     loginPasswordField.classList.remove('input-error')
-    errorMessage.style.display = "none"
+    errorMessage.style.opacity = 0
 })
 
 
